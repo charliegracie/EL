@@ -1,0 +1,9 @@
+Test
+
+DEF main 0
+	NOP
+	PUSH_CONSTANT 9
+	PUSH_CONSTANT 8
+	ADD
+	RET
+end
