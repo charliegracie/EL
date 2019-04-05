@@ -5,7 +5,7 @@ include(ExternalProject)
 set(OMR_ROOT ${CMAKE_CURRENT_BINARY_DIR}/external_omr)
 set(OMR_INCLUDE_DIRS ${OMR_ROOT}/include_core ${OMR_ROOT}/jitbuilder/release/cpp/include)
 set(OMR_GIT_REPOSITORY https://github.com/charliegracie/omr.git)
-set(OMR_TAG jpoint2019)
+set(OMR_TAG conf2019)
 set(OMR_JITBUILDER_STATIC_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/omr_jitbuilder/src/omr_jitbuilder-build/jitbuilder/libjitbuilder.a)
 
 set(OMR_BUILD_COMMAND
