@@ -5,10 +5,7 @@ add_executable(el
 	CMInterpreterMethod.cpp
 	IBInterpreter.cpp
 	JBInterpreter.cpp
-	$<TARGET_OBJECTS:bytecodes>
-	$<TARGET_OBJECTS:helpers>
-	$<TARGET_OBJECTS:parser>
 )
 
-target_link_libraries(el omr_jitbuilder_static)
+target_link_libraries(el bytecodes helpers parser omr_jitbuilder_static)
 

@@ -33,3 +33,4 @@
 
 # Build folder
 [Bb]uild/
+.vscode/

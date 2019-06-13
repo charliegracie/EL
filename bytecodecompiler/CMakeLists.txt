@@ -20,9 +20,8 @@ add_executable(elc
 	Main.cpp
 	${ANTLR_elparser_CXX_OUTPUTS}
 	${ANTLR_elparser_CXX_OUTPUTS}
-	$<TARGET_OBJECTS:bytecodes>
 )
 
-target_link_libraries(elc antlr4_static)
+target_link_libraries(elc bytecodes antlr4_static)
 
 
