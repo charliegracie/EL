@@ -1,7 +1,7 @@
 
 # required if linking to static library
 add_definitions(-DANTLR4CPP_STATIC)
-add_definitions(-DANTLR4_TAG=4.7.2)
+set(DANTLR4_TAG 4.7.2)
 
 # add external build for antlrcpp
 include(ExternalAntlr4Cpp)
@@ -14,11 +14,9 @@ find_package(ANTLR REQUIRED)
 antlr_target(elparser EL.g4 LISTENER VISITOR)
 
 include_directories(${ANTLR_elparser_OUTPUT_DIR})
-include_directories(${ANTLR_elparser_OUTPUT_DIR})
 
 add_executable(elc
 	Main.cpp
-	${ANTLR_elparser_CXX_OUTPUTS}
 	${ANTLR_elparser_CXX_OUTPUTS}
 )
 
