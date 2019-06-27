@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 IBM Corp. and others
+ * Copyright (c) 2016, 2019 IBM Corp. and others
  *
  * This program and the accompanying materials are made available under
  * the terms of the Eclipse Public License 2.0 which accompanies this
@@ -60,49 +60,49 @@
 #define Next break
 #endif
 
-#define doNop() \
+#define registerNop() \
 do { \
     opcodes += 1; \
 } while (0)
 
-#define doPushConstant() \
+#define registerPushConstant() \
 do { \
     PUSH(getImmediate(opcodes, IMMEDIATE0)); \
     opcodes += 9; \
 } while (0)
 
-#define doPushArg() \
+#define registerPushArg() \
 do { \
     PUSH(args[getImmediate(opcodes, IMMEDIATE0)]); \
     opcodes += 9; \
 } while (0)
 
-#define doPushLocal() \
+#define registerPushLocal() \
 do { \
     PUSH(locals[getImmediate(opcodes, IMMEDIATE0)]); \
     opcodes += 9; \
 } while (0)
 
-#define doPop() \
+#define registerPop() \
 do { \
     POP(); \
     opcodes += 1; \
 } while (0)
 
-#define doPopLocal() \
+#define registerPopLocal() \
 do { \
     locals[getImmediate(opcodes, IMMEDIATE0)] = POP(); \
     opcodes += 9; \
 } while (0)
 
-#define doDup() \
+#define registerDup() \
 do { \
     int64_t val = PEEK(); \
     PUSH(val); \
     opcodes += 1; \
 } while (0)
 
-#define doAdd() \
+#define registerAdd() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -110,7 +110,7 @@ do { \
     opcodes += 1; \
 } while (0)
 
-#define doSub() \
+#define registerSub() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -118,7 +118,7 @@ do { \
     opcodes += 1; \
 } while (0)
 
-#define doMul() \
+#define registerMul() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -126,7 +126,7 @@ do { \
     opcodes += 1; \
 } while (0)
 
-#define doDiv() \
+#define registerDiv() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -134,7 +134,7 @@ do { \
     opcodes += 1; \
 } while (0)
 
-#define doMod() \
+#define registerMod() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -142,13 +142,13 @@ do { \
     opcodes += 1; \
 } while (0)
 
-#define doJMP() \
+#define registerJMP() \
 do { \
     int64_t jumpIndex = getImmediate(opcodes, IMMEDIATE0); \
     opcodes = &function->opcodes[jumpIndex]; \
 } while(0)
 
-#define doJMPE() \
+#define registerJMPE() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -160,7 +160,7 @@ do { \
     } \
 } while(0)
 
-#define doJMPL() \
+#define registerJMPL() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -172,7 +172,7 @@ do { \
     } \
 } while(0)
 
-#define doJMPG() \
+#define registerJMPG() \
 do { \
     int64_t right = POP(); \
     int64_t left = POP(); \
@@ -184,7 +184,7 @@ do { \
     } \
 } while(0)
 
-#define doCall() \
+#define registerCall() \
 do { \
     int64_t functionID = getImmediate(opcodes, IMMEDIATE0); \
     int64_t numberOfArgs = getImmediate(opcodes, IMMEDIATE1); \
@@ -198,7 +198,7 @@ do { \
     opcodes += 17; \
 } while(0)
 
-#define doPrintString() \
+#define registerPrintString() \
 do { \
     int64_t stringID = getImmediate(opcodes, IMMEDIATE0); \
     String *string = vm->strings[stringID]; \
@@ -206,13 +206,13 @@ do { \
     opcodes += 9; \
 } while (0)
 
-#define doPrintInt64() \
+#define registerPrintInt64() \
 do { \
     fprintf(stdout, "%lld", POP()); \
     opcodes += 1; \
 } while (0)
 
-#define doCurrentTime() \
+#define registerCurrentTime() \
 do { \
     struct timeval tp; \
     gettimeofday(&tp, NULL); \
@@ -221,7 +221,7 @@ do { \
     opcodes += 1; \
 } while (0)
 
-#define doHalt() \
+#define registerHalt() \
 do { \
     exit(0); \
 } while (0)
@@ -284,87 +284,87 @@ int64_t CInterpreter::interpret(VM *vm, Function *function, int64_t *a) {
 #endif
         Instruction(NOP):
         {
-            doNop();
+            registerNop();
             Next;
         }
         Instruction(PUSH_CONSTANT):
         {
-            doPushConstant();
+            registerPushConstant();
             Next;
         }
         Instruction(PUSH_ARG):
         {
-            doPushArg();
+            registerPushArg();
             Next;
         }
         Instruction(PUSH_LOCAL):
         {
-            doPushLocal();
+            registerPushLocal();
             Next;
         }
         Instruction(POP):
         {
-            doPop();
+            registerPop();
             Next;
         }
         Instruction(POP_LOCAL):
         {
-            doPopLocal();
+            registerPopLocal();
             Next;
         }
         Instruction(DUP):
         {
-            doDup();
+            registerDup();
             Next;
         }
         Instruction(ADD):
         {
-            doAdd();
+            registerAdd();
             Next;
         }
         Instruction(SUB):
         {
-            doSub();
+            registerSub();
             Next;
         }
         Instruction(MUL):
         {
-            doMul();
+            registerMul();
             Next;
         }
         Instruction(DIV):
         {
-            doDiv();
+            registerDiv();
             Next;
         }
         Instruction(MOD):
         {
-            doMod();
+            registerMod();
             Next;
         }
         Instruction(JMP):
         {
-            doJMP();
+            registerJMP();
             Next;
         }
         Instruction(JMPE):
         {
-            doJMPE();
+            registerJMPE();
             Next;
         }
         Instruction(JMPL):
         {
-            doJMPL();
+            registerJMPL();
             Next;
         }
         Instruction(JMPG):
         {
-            doJMPG();
+            registerJMPG();
             Next;
         }
         Instruction(CALL):
         {
-            doCall();
+            registerCall();
             Next;
         }
         Instruction(RET):
@@ -378,22 +378,22 @@ int64_t CInterpreter::interpret(VM *vm, Function *function, int64_t *a) {
         }
         Instruction(PRINT_STRING):
         {
-            doPrintString();
+            registerPrintString();
             Next;
         }
         Instruction(PRINT_INT64):
         {
-            doPrintInt64();
+            registerPrintInt64();
             Next;
         }
         Instruction(CURRENT_TIME):
         {
-            doCurrentTime();
+            registerCurrentTime();
             Next;
         }
         Instruction(HALT):
         {
-            doHalt();
+            registerHalt();
         }
 #if INTERP_USE_COMPUTED_GOTO==0
         default:
