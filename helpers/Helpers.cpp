@@ -28,6 +28,7 @@
 #include <cstring>
 #include <cstddef>
 
+#include <inttypes.h>
 #include <time.h>
 #include <sys/time.h>
 
@@ -47,7 +48,7 @@ void printStringHelper(int64_t ptr, int64_t length) {
 
 void printInt64(int64_t val) {
 #define PRINTINT64_LINE LINETOSTR(__LINE__)
-    fprintf(stdout, "%lld", val);
+    fprintf(stdout, "%" PRIu64 "\n", val);
 }
 int64_t getCurrentTime(int64_t val) {
 #define GETCURRENTTIME_LINE LINETOSTR(__LINE__)
