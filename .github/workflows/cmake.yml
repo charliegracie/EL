@@ -7,12 +7,15 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  build:
+  job:
+    name: ${{ matrix.os }}-CMake-build
     # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
-    runs-on: ubuntu-latest
+    # well on Windows or Mac.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -20,6 +23,7 @@ jobs:
     - name: install packages
       run: |
           sudo apt-get update -m && sudo apt-get install -y libelf-dev libdwarf-dev uuid-dev
+      if: "contains( matrix.os, 'ubuntu')"
 
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
