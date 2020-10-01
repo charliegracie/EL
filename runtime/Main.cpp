@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+#include <inttypes.h>
+
 #include "EL.hpp"
 #include "ELParser.hpp"
 #include "CInterpreter.hpp"
@@ -102,10 +104,10 @@ int main(int argc, char *argv[]) {
             }
             shutdownJit();
         } else {
-            fprintf(stderr, "Error unknown interpreter type %lld\n", options.interpreterType);
+            fprintf(stderr, "Error unknown interpreter type %" PRIu64 "\n", options.interpreterType);
             return -3;
         }
-        fprintf(stdout, "Main returned %lld\n", ret);
+        fprintf(stdout, "Main returned %" PRIu64 "\n", ret);
     } else {
         fprintf(stderr, "Failed to find main function\n");
     }
@@ -133,7 +135,7 @@ int64_t parseOptions(Options *options, int argc, char *argv[]) {
             }
         } else if (0 == strcmp("-it", arg)) {
             options->interpreterType = atol(argv[++i]);
-            fprintf(stderr, "type %lld\n", options->interpreterType);
+            fprintf(stderr, "type %" PRIu64 "\n", options->interpreterType);
         }  else {
             fprintf(stderr, "Invalid option %s\n", arg);
             return -1;
@@ -169,27 +171,27 @@ void dumpProgram(Program *program) {
         int64_t opcodeCount = function->opcodeCount;
         int8_t *opcodes = function->opcodes;
 
-        fprintf(stdout, "Function: %s opcodeCount %lld\n", functionName, opcodeCount);
+        fprintf(stdout, "Function: %s opcodeCount %" PRIu64 "\n", functionName, opcodeCount);
 
         int64_t index = 0;
         while (index < opcodeCount) {
             Bytecodes opcode = (Bytecodes)opcodes[index];
-            fprintf(stdout, "\t%lld", index);
+            fprintf(stdout, "\t%" PRIu64, index);
             switch (opcode) {
             case Bytecodes::NOP:
                 fprintf(stdout, "\tNOP\n");
                 index += 1;
                 break;
             case Bytecodes::PUSH_CONSTANT:
-                fprintf(stdout, "\tPUSH_CONSTANT %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tPUSH_CONSTANT %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::PUSH_ARG:
-                fprintf(stdout, "\tPUSH_ARG %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tPUSH_ARG %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::PUSH_LOCAL:
-                fprintf(stdout, "\tPUSH_LOCAL %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tPUSH_LOCAL %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::POP:
@@ -197,7 +199,7 @@ void dumpProgram(Program *program) {
                 index += 1;
                 break;
             case Bytecodes::POP_LOCAL:
-                fprintf(stdout, "\tPOP_LOCAL %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tPOP_LOCAL %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::DUP:
@@ -225,25 +227,25 @@ void dumpProgram(Program *program) {
                 index += 1;
                 break;
             case Bytecodes::JMP:
-                fprintf(stdout, "\tJMP %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tJMP %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::JMPE:
-                fprintf(stdout, "\tJMPE %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tJMPE %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::JMPL:
-                fprintf(stdout, "\tJMPL %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tJMPL %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::JMPG:
-                fprintf(stdout, "\tJMPG %lld\n", read64(opcodes + index + 1));
+                fprintf(stdout, "\tJMPG %" PRIu64 "\n", read64(opcodes + index + 1));
                 index += 9;
                 break;
             case Bytecodes::CALL:
             {
                 int64_t functionID = read64(opcodes + index + 1);
-                fprintf(stdout, "\tCALL %s(%lld) %lld\n", program->functions[functionID]->functionName, functionID, read64(opcodes + index + 9));
+                fprintf(stdout, "\tCALL %s(%" PRIu64 ") %" PRIu64 "\n", program->functions[functionID]->functionName, functionID, read64(opcodes + index + 9));
                 index += 17;
                 break;
             }
@@ -287,7 +289,7 @@ void dumpProgram(Program *program) {
                 break;
             }
             default:
-                fprintf(stderr, "\tUnknown opcode at %lld. Exiting...\n", index);
+                fprintf(stderr, "\tUnknown opcode at %" PRIu64 ". Exiting...\n", index);
                 exit(-1);
             }
         }

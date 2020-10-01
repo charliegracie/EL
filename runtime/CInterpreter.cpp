@@ -25,6 +25,7 @@
 #include <stdint.h>
 #include <errno.h>
 
+#include <inttypes.h>
 #include <time.h>
 #include <sys/time.h>
 #include "EL.hpp"
@@ -208,7 +209,7 @@ do { \
 
 #define doPrintInt64() \
 do { \
-    fprintf(stdout, "%lld", POP()); \
+    fprintf(stdout, "%" PRIu64, POP()); \
     opcodes += 1; \
 } while (0)
 

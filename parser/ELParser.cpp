@@ -27,6 +27,8 @@
 
 #include <map>
 
+#include <inttypes.h>
+
 #include "ELParser.hpp"
 
 #define EYECATCHER "ELLE"
@@ -275,7 +277,7 @@ int8_t *ELParser::parseFunctionOpcodes(int64_t opcodeCount, int64_t *functionMax
         if (it != destinationStackSizes.end()) {
             if (currentStackDepth != it->second) {
                 if (currentStackDepth != -1) {
-                    fprintf(stderr, "Mismatched stack size for instruction %lld that was a forward jump destination %lld != %lld\n", index, currentStackDepth, it->second);
+                    fprintf(stderr, "Mismatched stack size for instruction %" PRIu64 " that was a forward jump destination %" PRIu64 " != %" PRIu64 "\n", index, currentStackDepth, it->second);
                     free(opcodes);
                     return NULL;
                 }
@@ -283,7 +285,7 @@ int8_t *ELParser::parseFunctionOpcodes(int64_t opcodeCount, int64_t *functionMax
             currentStackDepth = it->second;
         } else {
             if (currentStackDepth == -1) {
-                fprintf(stderr, "Unreachable instruction after a return at index %lld\n", index);
+                fprintf(stderr, "Unreachable instruction after a return at index %" PRIu64 "\n", index);
                 free(opcodes);
                 return NULL;
             }
@@ -377,7 +379,7 @@ int8_t *ELParser::parseFunctionOpcodes(int64_t opcodeCount, int64_t *functionMax
              ret = destinationStackSizes.insert(make_pair(destination, currentStackDepth));
              if (!ret.second) {
                  if (currentStackDepth != ret.first->second) {
-                     fprintf(stderr, "Stack size mismatch (%lld != %lld) jumping to instruction %lld\n", currentStackDepth, ret.first->second, destination);
+                     fprintf(stderr, "Stack size mismatch (%" PRIu64 " != %" PRIu64 ") jumping to instruction %" PRIu64 "\n", currentStackDepth, ret.first->second, destination);
                      free(opcodes);
                      return NULL;
                  }
@@ -400,7 +402,7 @@ int8_t *ELParser::parseFunctionOpcodes(int64_t opcodeCount, int64_t *functionMax
             ret = destinationStackSizes.insert(make_pair(destination, currentStackDepth));
             if (!ret.second) {
                 if (currentStackDepth != ret.first->second) {
-                    fprintf(stderr, "Stack size mismatch (%lld != %lld) jumping to instruction %lld\n", currentStackDepth, ret.first->second, destination);
+                    fprintf(stderr, "Stack size mismatch (%" PRIu64 " != %" PRIu64 ") jumping to instruction %" PRIu64 "\n", currentStackDepth, ret.first->second, destination);
                     free(opcodes);
                     return NULL;
                 }
@@ -425,7 +427,7 @@ int8_t *ELParser::parseFunctionOpcodes(int64_t opcodeCount, int64_t *functionMax
         }
         case Bytecodes::RET:
             if (currentStackDepth != 1) {
-                fprintf(stderr, "Stack size %lld != 1 on return\n", currentStackDepth);
+                fprintf(stderr, "Stack size %" PRIu64 " != 1 on return\n", currentStackDepth);
                 free(opcodes);
                 return NULL;
             }
@@ -456,7 +458,7 @@ int8_t *ELParser::parseFunctionOpcodes(int64_t opcodeCount, int64_t *functionMax
             break;
         }
         default:
-            fprintf(stderr, "Unknown opcode at index %lld during load\n", index);
+            fprintf(stderr, "Unknown opcode at index %" PRIu64 " during load\n", index);
             free(opcodes);
             return NULL;
         }
