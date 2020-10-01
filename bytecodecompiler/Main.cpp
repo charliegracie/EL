@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include <cstring>
 #include <vector>
 #include <limits>
 
