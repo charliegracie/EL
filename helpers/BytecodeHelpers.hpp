@@ -59,28 +59,28 @@ void setLocal(RuntimeBuilder *rb, IlBuilder *builder, IlValue *localIndex, IlVal
 int64_t invokedCompiledFunction(VM *vm, Function *function, int64_t*args);
 void compileFunction(VM *vm, Function *function);
 
-int64_t doNop(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doPushConstant(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doPushArg(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doPushLocal(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doPop(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doPopLocal(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doDup(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doAdd(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doSub(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doMul(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doDiv(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doMod(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doJMP(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doJMPE(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doJMPL(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doJMPG(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doCall(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doRet(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doPrintString(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doPrintInt64(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doCurrentTime(RuntimeBuilder *rb, IlBuilder *b);
-int64_t doHalt(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerNop(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerPushConstant(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerPushArg(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerPushLocal(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerPop(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerPopLocal(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerDup(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerAdd(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerSub(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerMul(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerDiv(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerMod(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerJMP(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerJMPE(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerJMPL(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerJMPG(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerCall(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerRet(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerPrintString(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerPrintInt64(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerCurrentTime(RuntimeBuilder *rb, IlBuilder *b);
+int64_t registerHalt(RuntimeBuilder *rb, IlBuilder *b);
 
 class InterpreterVMState: public VirtualMachineState {
 public:

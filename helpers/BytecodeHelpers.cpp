@@ -99,13 +99,13 @@ void compileFunction(VM *vm, Function *function) {
     }
 }
 
-int64_t doNop(RuntimeBuilder *rb, IlBuilder *b)
+int64_t registerNop(RuntimeBuilder *rb, IlBuilder *b)
    {
    rb->DefaultFallthrough(b, b->ConstInt64(1));
    return 0;
    }
 
-int64_t doPushConstant(RuntimeBuilder *rb, IlBuilder *b)
+int64_t registerPushConstant(RuntimeBuilder *rb, IlBuilder *b)
    {
    IlValue *constant = rb->GetInt64Immediate(b, b->ConstInt64(1));
    push(rb, b, constant);
@@ -113,7 +113,7 @@ int64_t doPushConstant(RuntimeBuilder *rb, IlBuilder *b)
    return 0;
    }
 
-int64_t doPushArg(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerPushArg(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *argIndex = rb->GetInt64Immediate(b, b->ConstInt64(1));
     IlValue *arg = getArg(rb, b, argIndex);
     push(rb, b, arg);
@@ -121,7 +121,7 @@ int64_t doPushArg(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doPushLocal(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerPushLocal(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *localIndex = rb->GetInt64Immediate(b, b->ConstInt64(1));
     IlValue *local = getLocal(rb, b, localIndex);
     push(rb, b, local);
@@ -129,13 +129,13 @@ int64_t doPushLocal(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doPop(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerPop(RuntimeBuilder *rb, IlBuilder *b) {
     pop(rb, b);
     rb->DefaultFallthrough(b, b->ConstInt64(1));
     return 0;
 }
 
-int64_t doPopLocal(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerPopLocal(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *localIndex = rb->GetInt64Immediate(b, b->ConstInt64(1));
     IlValue *local = pop(rb, b);
     setLocal(rb, b, localIndex, local);
@@ -143,13 +143,13 @@ int64_t doPopLocal(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doDup(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerDup(RuntimeBuilder *rb, IlBuilder *b) {
     dup(rb, b);
     rb->DefaultFallthrough(b, b->ConstInt64(1));
     return 0;
 }
 
-int64_t doAdd(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerAdd(RuntimeBuilder *rb, IlBuilder *b) {
     //TODO switch all IlValue * to named tmps for all operations
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
@@ -159,7 +159,7 @@ int64_t doAdd(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doSub(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerSub(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
     IlValue *res = b->Sub(left, right);
@@ -168,7 +168,7 @@ int64_t doSub(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doMul(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerMul(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
     IlValue *res = b->Mul(left, right);
@@ -177,7 +177,7 @@ int64_t doMul(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doDiv(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerDiv(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
     IlValue *res = b->Div(left, right);
@@ -186,7 +186,7 @@ int64_t doDiv(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doMod(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerMod(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
     IlValue *res = b->Rem(left, right);
@@ -195,13 +195,13 @@ int64_t doMod(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doJMP(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerJMP(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *target = rb->GetInt64Immediate(b, b->ConstInt64(1));
     rb->Jump(b, target, true);
     return 0;
 }
 
-int64_t doJMPE(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerJMPE(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
     IlValue *condition = b->EqualTo(left, right);
@@ -210,7 +210,7 @@ int64_t doJMPE(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doJMPL(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerJMPL(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
     IlValue *condition = b->LessThan(left, right);
@@ -219,7 +219,7 @@ int64_t doJMPL(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doJMPG(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerJMPG(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *right = pop(rb, b);
     IlValue *left = pop(rb, b);
     IlValue *condition = b->GreaterThan(left, right);
@@ -228,7 +228,7 @@ int64_t doJMPG(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doCall(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerCall(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *functionID = rb->GetInt64Immediate(b, b->ConstInt64(1));
     IlValue *argCount = rb->GetInt64Immediate(b, b->ConstInt64(9));
 
@@ -310,7 +310,7 @@ int64_t doCall(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doRet(RuntimeBuilder *rb, IlBuilder *b)
+int64_t registerRet(RuntimeBuilder *rb, IlBuilder *b)
    {
    b->Store("return_retVal", pop(rb, b));
    b->StoreIndirect("VM", "frame",
@@ -330,7 +330,7 @@ int64_t doRet(RuntimeBuilder *rb, IlBuilder *b)
    return 1;
    }
 
-int64_t doPrintString(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerPrintString(RuntimeBuilder *rb, IlBuilder *b) {
     IlValue *vm = b->Load("vm");
     IlValue *stringID = rb->GetInt64Immediate(b, b->ConstInt64(1));
     IlValue *stringVal =
@@ -344,19 +344,19 @@ int64_t doPrintString(RuntimeBuilder *rb, IlBuilder *b) {
     return 0;
 }
 
-int64_t doPrintInt64(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerPrintInt64(RuntimeBuilder *rb, IlBuilder *b) {
     b->Call("printInt64", 1, pop(rb, b));
     rb->DefaultFallthrough(b, b->ConstInt64(1));
     return 0;
 }
 
-int64_t doCurrentTime(RuntimeBuilder *rb, IlBuilder *b) {
+int64_t registerCurrentTime(RuntimeBuilder *rb, IlBuilder *b) {
     push(rb, b, b->Call("getCurrentTime", 0));
     rb->DefaultFallthrough(b, b->ConstInt64(1));
     return 0;
 }
 
-int64_t doHalt(RuntimeBuilder *rb, IlBuilder *b)
+int64_t registerHalt(RuntimeBuilder *rb, IlBuilder *b)
    {
    b->Call("exit", 1, b->ConstInt32(0));
    return 1;
